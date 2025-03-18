@@ -11,6 +11,100 @@
         <h1>Admin Panel - Kelola Kuota</h1>
         <div id="admin-controls"></div>
     </div>
+    <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Kelola Kuota</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+</head>
+<body>
+    <h1>Admin Panel - Kelola Kuota</h1>
+    
+    <div>
+        <h2>Tambah Member</h2>
+        <input type="text" id="newMemberName" placeholder="Nama Member">
+        <button onclick="addMember()">Tambah Member</button>
+    </div>
+    
+    <div>
+        <h2>Kelola Kuota</h2>
+        <select id="memberList"></select>
+        <input type="number" id="quotaAmount" placeholder="Jumlah Kuota (MB)">
+        <button onclick="addQuota()">Tambah Kuota</button>
+        <button onclick="reduceQuota()">Kurangi Kuota</button>
+    </div>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyC1tHRueP_Yhh8bxgglvWnBOlP9QG0qWqg",
+            authDomain: "arta-57b45.firebaseapp.com",
+            databaseURL: "https://arta-57b45-default-rtdb.firebaseio.com/",
+            projectId: "arta-57b45",
+            storageBucket: "arta-57b45.appspot.com",
+            messagingSenderId: "592271829041",
+            appId: "1:592271829041:web:f4f9ed4b21905e50d1cd10",
+            measurementId: "G-XY1DRLS38C"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        function addMember() {
+            const name = document.getElementById('newMemberName').value;
+            if (name) {
+                db.ref('members/' + name).set({ quota: 7000 }); // Default 7GB
+                alert("Member " + name + " berhasil ditambahkan!");
+                loadMembers();
+            }
+        }
+        
+        function loadMembers() {
+            const memberList = document.getElementById('memberList');
+            memberList.innerHTML = "";
+            db.ref('members').once('value', snapshot => {
+                snapshot.forEach(child => {
+                    let option = document.createElement("option");
+                    option.value = child.key;
+                    option.textContent = child.key;
+                    memberList.appendChild(option);
+                });
+            });
+        }
+        
+        function addQuota() {
+            const member = document.getElementById('memberList').value;
+            const amount = parseInt(document.getElementById('quotaAmount').value);
+            if (member && amount) {
+                db.ref('members/' + member + '/quota').once('value', snapshot => {
+                    let newQuota = snapshot.val() + amount;
+                    db.ref('members/' + member + '/quota').set(newQuota);
+                    alert("Kuota berhasil ditambahkan!");
+                });
+            }
+        }
+        
+        function reduceQuota() {
+            const member = document.getElementById('memberList').value;
+            const amount = parseInt(document.getElementById('quotaAmount').value);
+            if (member && amount) {
+                db.ref('members/' + member + '/quota').once('value', snapshot => {
+                    let newQuota = snapshot.val() - amount;
+                    db.ref('members/' + member + '/quota').set(newQuota);
+                    alert("Kuota berhasil dikurangi!");
+                });
+            }
+        }
+        
+        window.onload = loadMembers;
+    </script>
+</body>
+</html>
+
+
     <script src="firebase-config.js"></script>
     <script src="admin.js"></script>
 </body>
