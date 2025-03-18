@@ -3,29 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cek Kuota - Arta XL Circle</title>
+    <title>Admin Panel</title>
     <link rel="stylesheet" href="style.css">
-
-    <script>
-        // Redirect ke admin.html jika URL mengandung "?admin"
-        if (window.location.search.includes("admin")) {
-            window.location.href = "admin.html";
-        }
-    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Cek Kuota Arta XL Circle</h1>
-        <div id="profile"></div>
-        <div id="members"></div>
+        <h1>Admin Panel - Kelola Kuota</h1>
+        <div id="admin-controls"></div>
     </div>
-
-    <!-- Tombol refresh -->
-    <button id="refresh">🔄</button>
-
-    <!-- Load Firebase dan Script JS -->
-    <script src="firebase-config.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="firebase-config.js"></script>
+    <script src="admin.js"></script>
 </body>
-  </html>
-  
+</html>
